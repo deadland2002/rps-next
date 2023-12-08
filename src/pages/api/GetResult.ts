@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type {NextApiRequest, NextApiResponse} from 'next'
+import {RunResult} from "sqlite3";
 
 type Data = {
     name: string
@@ -41,20 +42,14 @@ export default async function handler(
                     console.log("Created items table.");
 
 
-                    const insertSql = `INSERT INTO Item(UserMove, CompMove, Result) VALUES( ?, ?, ?)`;
-                    const values1 = [
-                        "Rock",
-                        "Scissor",
-                        "WIN"
-                    ]
+                    const GetSQL = `Select * from Game`;
 
-                    db.run(insertSql, values1, function (err: Error) {
+                    db.all(GetSQL, [], (err:Error, rows:unknown[]) => {
                         if (err) {
-                            throw err.message;
+                            throw err;
                         }
-                        const id = this.lastID; // get the id of the last inserted row
-                        console.log(`Rows inserted, ID ${id}`);
-                        return res.status(200).json({ID: id})
+                        console.log(rows); // rows will contain the results
+                        return res.status(200).json({result: rows})
                     });
                 }
             );
