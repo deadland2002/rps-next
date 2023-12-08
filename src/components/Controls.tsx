@@ -32,6 +32,11 @@ const Controls = ({reFetch}:{reFetch:()=>void}) => {
             return;
         try{
             if(val == 3){
+                const result = await axios.get("/api/ResetResult");
+                console.log(result.data)
+                if(result.data.status === 200){
+                    reFetch();
+                }
                 return;
             }
 
